@@ -40,14 +40,19 @@ app.get("/filteredimage", async (req, res) => {
     res.send("Your image is unavailable!");
   }
 
-  const outputPath = await filterImageFromURL(image_url);
+  try {
+    const outputPath = await filterImageFromURL(image_url);
 
-  res.sendFile(path.resolve(outputPath), err => {
-    if (err) {
-      res.sendStatus(500);
-    }
-    deleteLocalFiles([path.resolve(outputPath)]);
-  });
+    res.sendFile(path.resolve(outputPath), err => {
+      if (err) {
+        res.sendStatus(500);
+      }
+      deleteLocalFiles([path.resolve(outputPath)]);
+    });
+  } catch (err) {
+    console.log(err);
+    res.send("Your image is unsupported!");
+  }
   
   
 });
